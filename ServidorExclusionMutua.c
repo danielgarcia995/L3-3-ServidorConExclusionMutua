@@ -12,6 +12,45 @@ int contador;
 //Estructura necesaria para acceso excluyente
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+//Estrucutras lista sockets
+typedef struct {
+	
+	int socket;
+}Sockets;
+
+typedef struct {
+	
+	int num;
+	Sockets sockets[100];
+	
+}ListaSockets;
+
+ListaSockets lista;
+
+//Funcion anadir socket a la lista (AL CONECTAR)
+int PonSocket (ListaSockets *lista, int socket)
+{
+	if (lista->num == 100) //No se puede anadir mas usuarios, devuelve -1
+		return -1;
+	else{
+		lista->sockets[lista->num].socket = socket; //Anadimos en la posicion num y devuelve 0
+		lista->num++;
+		return 0;
+	}	
+}
+
+//Funcion eliminar socket de la lista (DESCONECTAR)
+int EliminaSocket (ListaSockets *lista, int socket)
+{
+		int i;
+		for (i=socket; i < lista->num-1; i++)
+		{
+			lista->sockets[i].socket = lista->sockets[i+1].socket;
+		}
+		lista->num--;
+		return 0;
+}
+
 void *AtenderCliente (void *socket)
 {
 	int sock_conn;
@@ -42,55 +81,63 @@ void *AtenderCliente (void *socket)
 		
 		printf ("Peticion: %s\n",peticion);
 		
-		// vamos a ver que quieren
+		//Vamos a ver que quieren
 		char *p = strtok( peticion, "/");
 		int codigo =  atoi (p);
-		// Ya tenemos el c?digo de la petici?n
+		//Ya tenemos el c?digo de la petici?n
 		char nombre[20];
 		
 		if ((codigo !=0)&&(codigo!=4))
 		{
+			//Sacamos el nombre
 			p = strtok( NULL, "/");
-			
 			strcpy (nombre, p);
-			// Ya tenemos el nombre
 			printf ("Codigo: %d, Nombre: %s\n", codigo, nombre);
 		}
 		
-		if (codigo == 0) //petici?n de desconexi?n
+		if (codigo == 0) //Peticion de desconexion
+			
 			terminar=1;
+		
 		else if (codigo == 4)
+			
 			sprintf (respuesta,"%d",contador);
-		else if (codigo == 1) //piden la longitd del nombre
+		
+		else if (codigo == 1) //Piden la longitd del nombre
+			
 			sprintf (respuesta,"%d",strlen (nombre));
-		else if (codigo == 2)
-			// quieren saber si el nombre es bonito
-			if((nombre[0]=='M') || (nombre[0]=='S'))
-			strcpy (respuesta,"SI");
+		
+		else if (codigo == 2) //Quieren saber si el nombre es bonito
+			
+			if((nombre[0]=='M') || (nombre[0]=='S'))				
+				strcpy (respuesta,"SI");
+			
 			else
 				strcpy (respuesta,"NO");
-			else //quiere saber si es alto
-			{
-				p = strtok( NULL, "/");
-				float altura =  atof (p);
-				if (altura > 1.70)
-					sprintf (respuesta, "%s: eres alto",nombre);
-				else
-					sprintf (respuesta, "%s: eresbajo",nombre);
-			}
-			
-			if (codigo != 0)
-			{
-				printf ("Respuesta: %s\n", respuesta);
-				// Enviamos respuesta
-				write (sock_conn,respuesta, strlen(respuesta));
-			}
-			if ((codigo ==1)||(codigo==2)|| (codigo==3))
-			{
-				pthread_mutex_lock( &mutex ); //No me interrumpas ahora
-				contador = contador +1;
-				pthread_mutex_unlock( &mutex); //ya puedes interrumpirme
-			}
+		
+		else //Quiere saber si es alto
+		{
+			p = strtok( NULL, "/");
+			float altura =  atof (p);
+			if (altura > 1.70)
+				sprintf (respuesta, "%s: eres alto",nombre);
+			else
+				sprintf (respuesta, "%s: eresbajo",nombre);
+		}
+		
+		if (codigo != 0)
+		{
+			printf ("Respuesta: %s\n", respuesta);
+			// Enviamos respuesta
+			write (sock_conn,respuesta, strlen(respuesta));
+		}
+		
+		if ((codigo ==1)||(codigo==2)|| (codigo==3))
+		{
+			pthread_mutex_lock( &mutex ); //No me interrumpas ahora
+			contador = contador +1;
+			pthread_mutex_unlock( &mutex); //ya puedes interrumpirme
+		}
 			
 	}
 	// Se acabo el servicio para este cliente
@@ -126,26 +173,28 @@ int main(int argc, char *argv[])
 		printf("Error en el Listen");
 	
 	contador =0;
-	int i;
-	int sockets[100];
+
 	pthread_t thread;
-	i=0;
-	// Bucle para atender a 5 clientes
+	//Como no tenemos que usar el indentificador del trhead para nada
+	//quitamos el vector y lo dejamos como una variable
+	//cada vez que se conecte un cliente machacara el thread anterior.
+
+	//Bucle infinito
 	for (;;){
 		printf ("Escuchando\n");
 		
 		sock_conn = accept(sock_listen, NULL, NULL);
 		printf ("He recibido conexion\n");
-		
-		sockets[i] =sock_conn;
-		//sock_conn es el socket que usaremos para este cliente
-		
-		// Crear thead y decirle lo que tiene que hacer
-		pthread_create (&thread, NULL, AtenderCliente,&sockets[i]);
-		i=i+1;		
-	}
+		//sock_conn es el socket que usaremos para este cliente.
 	
+		PonSocket (&lista, sock_conn); 
+		//Llamamos a la funcion que pone el ultimo 
+		//socket disponible en la lista.
+		
+		//Crear thead y decirle lo que tiene que hacer
+		pthread_create (&thread, NULL, AtenderCliente, &lista.sockets[lista.num-1]);
+		
+	}	
 	//for (i=0; i<5; i++)
 	//pthread_join (thread[i], NULL);
-
 }

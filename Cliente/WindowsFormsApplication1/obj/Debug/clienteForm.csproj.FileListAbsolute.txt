@@ -106,3 +106,11 @@ C:\Users\Daniel\Downloads\ServicorConExclusionMutua\cliente_con_conexion_descone
 C:\Users\Daniel\Downloads\ServicorConExclusionMutua\cliente_con_conexion_desconexion\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache
 C:\Users\Daniel\Desktop\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\Daniel\Desktop\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Daniel\UPC\SO\Entrega#6.1-ServidorExcluyente\Entrega\Cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache
