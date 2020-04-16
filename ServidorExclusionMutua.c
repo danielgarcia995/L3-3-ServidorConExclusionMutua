@@ -96,9 +96,14 @@ void *AtenderCliente (void *socket)
 		}
 		
 		if (codigo == 0) //Peticion de desconexion
-			
+		{
 			terminar=1;
-		
+			int res1 = EliminaSocket (&lista, socket);
+			if (res1 == -1)
+				printf ("No esta.\n");
+			else
+				printf ("Socket eliminado: %d\n", socket);
+		}
 		else if (codigo == 4)
 			
 			sprintf (respuesta,"%d",contador);
